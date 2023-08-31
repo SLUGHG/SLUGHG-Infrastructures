@@ -103,7 +103,8 @@
                         <td>' + (feature.properties['Site'] !== null ? autolinker.link(feature.properties['Site'].toLocaleString()) : '') + '</td>\
                     </tr>\
                 </table>';
-            layer.bindPopup(popupContent, {maxHeight: 400});
+            var image = `<img class='photos' src = 'images/landscape/${feature.properties.ID}.png'/>`;
+            layer.bindPopup(popupContent+image, {maxWidth: "auto"});
         }
 
         function style_All_catchments_2_0() {
@@ -776,6 +777,16 @@
             propertyName: 'Site'}));
         document.getElementsByClassName('search-button')[0].className +=
          ' fa fa-binoculars';
+
+        //center on popupopen
+         map.on('popupopen', function(e) {
+            // find the pixel location on the map where the popup anchor is
+            var px = map.project(e.popup._latlng);
+            // find the height of the popup container, divide by 2 to centre, subtract from the Y axis of marker location
+            px.y -= e.popup._container.clientHeight/2;
+            // pan to new center
+            map.panTo(map.unproject(px),{animate: true});
+        });
         </script>
     </body>
 </html>
